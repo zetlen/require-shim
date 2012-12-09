@@ -29,21 +29,30 @@ The above config would enable you to require Backbone in your scripts like so:
 
 There are three drawbacks to this approach. In ascending order of seriousness, they are:
 
- - It's wordy, which adds file weight
- - It requires maintenance of a separate file, the config, with a dependency dictionary in it
- - It does not play nice with the optimizer. As the Require docs put it: *"if you use an AMD module as a dependency for a shim config module, after a build, that AMD module may not be evaluated until after the shimmed code in the build executes, and an error will occur. The ultimate fix is to upgrade all the shimmed code to have optional AMD define() calls."*
+-   It's wordy, which adds file weight
 
- The shim plugin addresses these concerns:
+-   It requires maintenance of a separate file, the config, with a dependency dictionary in it
+
+-   It does not play nice with the optimizer. As the Require docs put it: 
+    >*"if you use an AMD module as a dependency for a shim config module, after a build, that AMD module may not be evaluated until after the shimmed code in the build executes, and an error will occur. The ultimate fix is to upgrade all the shimmed code to have optional AMD define() calls."*
+
+
+
+
+The shim plugin addresses these concerns:
  
- - It has a concise syntax
- - It allows a description of the dependency *in the place where it is required*, making code more modular
- - When invoked via r.js, it writes an "upgraded" version of the non-AMD module into an optimized build.
+-   It has a concise syntax
 
- The shim plugin allows you to declare dependencies, specify exports, and name the arguments of nested dependencies.
+-   It allows a description of the dependency *in the place where it is required*, making code more modular
 
- ## Usage
+-   When invoked via r.js, it writes an "upgraded" version of the non-AMD module into an optimized build.
 
- The shim plugin equivalent of the above Backbone shim is:
+The shim plugin allows you to declare dependencies, specify exports, and name the arguments of nested dependencies.
+
+ 
+## Usage
+
+The shim plugin equivalent of the above Backbone shim is:
 
     require(['shim!backbone[underscore,jquery]>Backbone'], function(Backbone) {
         // Backbone available within callback.
