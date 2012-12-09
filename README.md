@@ -81,3 +81,9 @@ Note that the shimmed Backbone is declaring a *shimmed Underscore* as a dependen
     })
 
 And all from a single string that only looks a little wacky.
+
+## Installation
+
+### **Note**: The shim plugin has a hard dependency on the RequireJS text plugin. That plugin must be already installed in the manner described below.
+
+Download src/shim.js and put it in your RequireJS project's baseURL or appDir (alternately, write a paths config that points to it, like `paths: { shim: 'lib/shim.js'}`.)
