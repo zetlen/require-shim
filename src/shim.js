@@ -1,6 +1,6 @@
 /** @license
  * Shims non-AMD scripts with a define call. Based on depend.js require plugin by Miller Medeiros.
- * Author: James Zetlen, Volusion
+ * Author: James Zetlen
  * Version: 0.1.0 (2012/11/29)
  * Released under the MIT license
  */
