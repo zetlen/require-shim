@@ -1,7 +1,7 @@
 /** @license
  * Shims non-AMD scripts with a define call. Based on depend.js require plugin by Miller Medeiros.
- * Author: James Zetlen
- * Version: 0.1.0 (2012/11/29)
+ * Author: James Zetlen, Volusion
+ * Version: 0.2.0 (2013/9/13)
  * Released under the MIT license
  */
 define(['text'], function (text) {
@@ -60,16 +60,17 @@ define(['text'], function (text) {
 
         },
 
-        namedTmpl = 'define(\'{4}\',{0}, function({1}) { {2} ; return {3} });\n\n\n//@ sourceURL={4}.js\n\n',
+        namedTmpl = 'define(\'{4}\',[{0}], function({1}) { \n\n{2} ; \n\nreturn {3}; });\n\n\n//@ sourceURL={4}.js\n\n',
         anonTmpl = namedTmpl.replace('\'{4}\',', ''),
         createTextModule = function (parsedConf, body, named) {
+            var stringDeps = parsedConf.deps.length > 0 ? "'" + parsedConf.deps.join("','") + "'" : '';
             return (named ? namedTmpl : anonTmpl)
-                    .replace('{0}', JSON.stringify(parsedConf.deps))
-                    .replace('{1}', parsedConf.args.join(","))
-                    .replace('{3}', parsedConf.toExport)
+                    .split('{0}').join(stringDeps)
+                    .split('{1}').join(parsedConf.args.join(","))
+                    .split('{3}').join(parsedConf.toExport)
                     .split('{4}').join(parsedConf.name)
 
-                    .replace('{2}', body);
+                    .split('{2}').join(body);
         };
 
 
