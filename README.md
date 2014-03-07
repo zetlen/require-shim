@@ -8,24 +8,28 @@ You have chosen to use AMDs and RequireJS in your project. Congratulations. You 
 
 The [shim config](http://requirejs.org/docs/api.html#config-shim) is the official RequireJS feature for non-AMD scripts. To use a noncompliant script like Backbone, you would have to configure your Require instance like this:
 
-    requirejs.config({
-        shim: {
-            'backbone': {
-                //These script dependencies should be loaded before loading
-                //backbone.js
-                deps: ['underscore', 'jquery'],
-                //Once loaded, use the global 'Backbone' as the
-                //module value.
-                exports: 'Backbone'
-            },
-        }
-    })
+```javascript
+requirejs.config({
+    shim: {
+        'backbone': {
+            //These script dependencies should be loaded before loading
+            //backbone.js
+            deps: ['underscore', 'jquery'],
+            //Once loaded, use the global 'Backbone' as the
+            //module value.
+            exports: 'Backbone'
+        },
+    }
+})
+```
 
 The above config would enable you to require Backbone in your scripts like so:
 
-    require(['backbone'], function(Backbone){
-        // Backbone available within callback.
-    })
+```javascript
+require(['backbone'], function(Backbone){
+    // Backbone available within callback.
+})
+```
 
 There are three drawbacks to this approach. In ascending order of seriousness, they are:
 
@@ -54,31 +58,37 @@ The shim plugin allows you to declare dependencies, specify exports, and name th
 
 The shim plugin equivalent of the above Backbone shim is:
 
-    require(['shim!backbone[underscore,jquery]>Backbone'], function(Backbone) {
-        // Backbone available within callback.
-    });
+```javascript
+require(['shim!backbone[underscore,jquery]>Backbone'], function(Backbone) {
+    // Backbone available within callback.
+});
+```
 
 The angle bracket is the equivalent of the `exports` property of shim config. It tells the plugin that the `Backbone` variable of the shimmed script must be returned to the `define()` call, so it can be received as the first argument to the callback function. 
 
 Square Brackets enclose dependency descriptions. Optionally, you can name the argument that your shimmed script will receive in its AMD wrapper. It's not usually necessary for scripts that set globals, as Backbone and Underscore do, but it allows you to uglify top-level symbols and still maintain your references:
 
-    require(['shim!backbone[shim!underscore>_=_, jquery=jQuery]>Backbone'], function(Backbone){
-        // Backbone available even with all top-level symbols obfuscated.
-    })
+```javascript
+require(['shim!backbone[shim!underscore>_=_, jquery=jQuery]>Backbone'], function(Backbone){
+    // Backbone available even with all top-level symbols obfuscated.
+})
+```
 
 Note that the shimmed Backbone is declaring a *shimmed Underscore* as a dependency. You can nest calls to the shim plugin arbitrarily deep. Shimming is not necessary with jQuery, since jQuery already includes an AMD `define()` call. We merely need to name it jQuery, since that's what Backbone expects it to be called. This will result in the dynamic creation (or, in the case of the optimizer, the permanent creation) of the following:
 
-    // underscore first
-    define('underscore', [], function() {
-        // vendored Underscore code here
-        return _;
-    })
+```javascript
+// underscore first
+define('underscore', [], function() {
+    // vendored Underscore code here
+    return _;
+})
 
-    // then backbone
-    define('backbone', ['underscore','jquery'], function(_, jQuery){
-        // vendored Backbone code here
-        return Backbone;
-    })
+// then backbone
+define('backbone', ['underscore','jquery'], function(_, jQuery){
+    // vendored Backbone code here
+    return Backbone;
+})
+```
 
 And all from a single string that only looks a little wacky.
 
